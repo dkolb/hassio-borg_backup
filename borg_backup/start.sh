@@ -10,7 +10,7 @@ bashio::log.info "A public/private key pair was generated for you."
 bashio::log.notice "Please use this public key on the backup server:"
 bashio::log.notice "${PUBLIC_KEY}"
 
-if [ ! -f /data/known_hosts ]; then
+if [ ! -f /data/known_hosts -o "$(bashio::config 'reset_hostkeys' 'false')" = "true"]; then
    bashio::log.info "Running for the first time, acquiring host key and storing it in /data/known_hosts."
    ssh-keyscan -p $(bashio::config 'port') "$(bashio::config 'host')" > /data/known_hosts \
      || bashio::exit.nok "Could not acquire host key from backup server."
